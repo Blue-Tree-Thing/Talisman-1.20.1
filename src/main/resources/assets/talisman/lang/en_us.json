@@ -1,0 +1,26 @@
+{
+
+  "item.talisman.blank_talisman": "Blank Talisman",
+  "item.talisman.gumgar_spawn_egg": "Gumgar Spawn Egg",
+
+  "item.talisman.ferrous_heart": "Ferrous Heart",
+  "item.talisman.dark_essence": "Dark Essence",
+
+  "item.talisman.ooze_talisman": "Ooze Talisman",
+  "item.talisman.sludge_talisman": "Sludge Talisman",
+  "item.talisman.shadow_hand_talisman": "Shadow Hand Talisman",
+
+
+
+  "itemGroup.talisman": "Talisman",
+
+  "entity.talisman.ooze": "Ooze",
+  "entity.talisman.sludge": "Sludge",
+  "entity.talisman.shadow_hand": "Shadow Hand",
+  "entity.talisman.gumgar": "Gumgar",
+  "entity.talisman.lost_diligence": "Lost Diligence"
+
+
+
+
+}

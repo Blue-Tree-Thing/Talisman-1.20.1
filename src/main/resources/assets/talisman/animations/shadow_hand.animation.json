@@ -1,0 +1,66 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.shadow_hand.idle": {
+			"loop": true,
+			"animation_length": 4,
+			"bones": {
+				"hand": {
+					"scale": [
+						"1 + math.sin(query.anim_time * -90) * 0.01",
+						"1 + math.sin(query.anim_time * -90) * 0.01",
+						"1 + math.sin(query.anim_time * -90) * 0.01"
+					]
+				},
+				"thumb": {
+					"rotation": [0, 0, "math.sin(query.anim_time * -90) * 6"]
+				},
+				"pointer": {
+					"rotation": ["math.sin(query.anim_time * 90) * 3", 0, 0]
+				},
+				"index": {
+					"rotation": ["math.sin(query.anim_time * 90) * 5", 0, 0]
+				},
+				"ring": {
+					"rotation": ["math.sin(query.anim_time * 90) * 5", 0, 0]
+				},
+				"pinky": {
+					"rotation": ["math.sin(query.anim_time * 90) * 3", 0, 0]
+				}
+			}
+		},
+		"animation.shadow_hand.grab": {
+			"loop": true,
+			"animation_length": 0.5417,
+			"bones": {
+				"hand": {
+					"scale": [
+						"1 + math.sin(query.anim_time * -1440) * 0.01",
+						"1 + math.sin(query.anim_time * -1440) * 0.01",
+						"1 + math.sin(query.anim_time * -1440) * 0.01"
+					]
+				},
+				"thumb": {
+					"rotation": [0, 0, "25 + math.sin(query.anim_time * -1440) * 4"]
+				},
+				"pointer": {
+					"rotation": ["-20 + math.sin(query.anim_time * 1440) * 4", "5 + math.sin(query.anim_time * 1440) * -3", 0],
+					"position": [0, 0, "math.sin(query.anim_time * 1440) * -0.5"]
+				},
+				"index": {
+					"rotation": ["-20 + math.sin(query.anim_time * 1440) * 4", 0, 0],
+					"position": [0, 0, "math.sin(query.anim_time * 1440) * -0.5"]
+				},
+				"ring": {
+					"rotation": ["-20 + math.sin(query.anim_time * 1440) * 4", 0, 0],
+					"position": [0, 0, "math.sin(query.anim_time * 1440) * -0.5"]
+				},
+				"pinky": {
+					"rotation": ["-20 + math.sin(query.anim_time * 1440) * 4", "-5 + math.sin(query.anim_time * 1440) * 4", 0],
+					"position": [0, 0, "math.sin(query.anim_time * 1440) * -1"]
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

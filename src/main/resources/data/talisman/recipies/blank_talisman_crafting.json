@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#=#",
+    "#0#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:paper"
+    },
+    "0": {
+      "item": "minecraft:ferrous_heart"
+    },
+    "=": {
+      "item": "minecraft:copper"
+    }
+  },
+  "result": {
+    "item": "talisman:blank_talisman"
+  }
+}
