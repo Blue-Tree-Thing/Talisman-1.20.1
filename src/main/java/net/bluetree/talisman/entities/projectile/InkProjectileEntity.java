@@ -3,18 +3,17 @@ package net.bluetree.talisman.entities.projectile;
 import net.bluetree.talisman.entities.ModEntities;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes; // Import for the ink-like particles
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -57,11 +56,11 @@ public class InkProjectileEntity extends PersistentProjectileEntity implements G
         if (this.getWorld().isClient) {
             for (int i = 0; i < 2; i++) { // Spawn a couple of particles for visual effect
                 this.getWorld().addParticle(
-                        ParticleTypes.SQUID_INK, // Use squid ink particles for a more ink-like appearance
-                        this.getX() + (this.random.nextDouble() - 0.5) * this.getWidth(), // X position with some randomness
-                        this.getY() + (this.random.nextDouble() - 0.5) * this.getHeight(), // Y position with some randomness
-                        this.getZ() + (this.random.nextDouble() - 0.5) * this.getWidth(), // Z position with some randomness
-                        0.0D, 0.0D, 0.0D // Velocity of the particles (no movement)
+                        ParticleTypes.SQUID_INK,
+                        this.getX() + (this.random.nextDouble() - 0.5) * this.getWidth(),
+                        this.getY() + (this.random.nextDouble() - 0.5) * this.getHeight(),
+                        this.getZ() + (this.random.nextDouble() - 0.5) * this.getWidth(),
+                        0.0D, 0.0D, 0.0D
                 );
             }
         }
@@ -71,7 +70,6 @@ public class InkProjectileEntity extends PersistentProjectileEntity implements G
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
 
-        // Only handle collisions with blocks
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockHitResult = (BlockHitResult) hitResult;
 
@@ -80,7 +78,7 @@ public class InkProjectileEntity extends PersistentProjectileEntity implements G
                 // Spawn the ink cloud effect
                 spawnInkCloud();
 
-                // Play a simple splash or hit sound when it collides with a block
+                // Play a custom sound when it collides with a block, if desired
                 this.getWorld().playSound(
                         null,
                         this.getX(),
@@ -103,35 +101,58 @@ public class InkProjectileEntity extends PersistentProjectileEntity implements G
 
     // Method to spawn an ink cloud that deals damage and inflicts slowness
     private void spawnInkCloud() {
-        // Define the radius of the ink cloud effect
         double radius = 3.0;
 
-        // Get all living entities within the radius
         List<LivingEntity> entitiesInRange = this.getWorld().getEntitiesByClass(LivingEntity.class, this.getBoundingBox().expand(radius), entity -> entity.isAlive() && entity != this.getOwner());
 
         for (LivingEntity entity : entitiesInRange) {
-            // Apply damage to the entity using the mob attack method similar to the shadow hand
-            entity.damage(this.getDamageSources().magic(), 2); // Deal 4 damage (2 hearts)
-
-            // Apply slowness effect to the entity
+            entity.damage(this.getDamageSources().magic(), 2); // Deal 2 damage (1 heart)
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1)); // Slowness for 5 seconds at level 1
         }
 
-        // Spawn ink particles to visually represent the cloud
         for (int i = 0; i < 20; i++) {
             this.getWorld().addParticle(
-                    ParticleTypes.SQUID_INK, // Use squid ink particles for a more ink-like appearance
-                    this.getX() + (this.random.nextDouble() - 0.5) * radius * 2, // Randomized X position within the cloud radius
-                    this.getY() + 0.1, // Slightly above the ground
-                    this.getZ() + (this.random.nextDouble() - 0.5) * radius * 2, // Randomized Z position within the cloud radius
-                    0.0D, 0.05D, 0.0D // Small upward velocity for visual effect
+                    ParticleTypes.SQUID_INK,
+                    this.getX() + (this.random.nextDouble() - 0.5) * radius * 2,
+                    this.getY() + 0.1,
+                    this.getZ() + (this.random.nextDouble() - 0.5) * radius * 2,
+                    0.0D, 0.05D, 0.0D
             );
         }
     }
 
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
-        // Override without implementation to disable collision with entities
+        super.onEntityHit(entityHitResult);
+
+        if (!this.getWorld().isClient) {
+            PlayerEntity entity = (PlayerEntity) entityHitResult.getEntity();
+            if (entity.isAlive() && entity != this.getOwner()) {
+                // Deal damage to the entity
+                entity.damage(this.getDamageSources().magic(), 6); // Deal 4 damage (2 hearts)
+
+                // Apply slowness effect to the entity
+                entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1)); // Slowness for 5 seconds at level 1
+
+                // Play sound effect on entity hit
+                this.getWorld().playSound(
+                        null,
+                        entity.getX(),
+                        entity.getY(),
+                        entity.getZ(),
+                        SoundEvents.ENTITY_SLIME_ATTACK, // Adjust the sound effect as needed
+                        SoundCategory.PLAYERS,
+                        1.0F,
+                        1.0F
+                );
+
+                // Debug: Log when the projectile hits an entity
+                System.out.println("InkProjectileEntity hit an entity and dealt damage.");
+
+                // Remove the projectile entity
+                this.discard();
+            }
+        }
     }
 
     @Override
@@ -139,14 +160,11 @@ public class InkProjectileEntity extends PersistentProjectileEntity implements G
         return ItemStack.EMPTY; // No item representation for this projectile
     }
 
-    // Method to set an initial velocity for the projectile to make it short-ranged and aim slightly upwards
     public void setInitialVelocity(LivingEntity shooter, float pitch, float yaw, float roll, float speed, float divergence) {
-        // Reduce speed to make it short-ranged
-        speed *= 0.6F; // Reduce the force by half to create a short-ranged effect
+        speed *= 0.6F;
 
-        // Calculate the initial velocity components
         float xVec = -((float) Math.sin(Math.toRadians(yaw)) * (float) Math.cos(Math.toRadians(pitch)));
-        float yVec = -((float) Math.sin(Math.toRadians(pitch))) + 0.5F; // Add upward bias to give an arcing effect
+        float yVec = -((float) Math.sin(Math.toRadians(pitch))) + 0.5F;
         float zVec = ((float) Math.cos(Math.toRadians(yaw)) * (float) Math.cos(Math.toRadians(pitch)));
 
         this.setVelocity(xVec, yVec, zVec, speed, divergence);

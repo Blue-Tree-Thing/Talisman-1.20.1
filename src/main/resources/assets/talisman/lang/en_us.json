@@ -1,6 +1,11 @@
 {
 
+  "block.talisman.virtue_altar": "Virtue Altar",
+
+
   "item.talisman.blank_talisman": "Blank Talisman",
+  "item.talisman.aspect_of_diligence": "Aspect Of Diligence",
+
   "item.talisman.gumgar_spawn_egg": "Gumgar Spawn Egg",
 
   "item.talisman.ferrous_heart": "Ferrous Heart",
@@ -9,7 +14,10 @@
   "item.talisman.ooze_talisman": "Ooze Talisman",
   "item.talisman.sludge_talisman": "Sludge Talisman",
   "item.talisman.shadow_hand_talisman": "Shadow Hand Talisman",
+  "item.talisman.lost_diligence_talisman": "Talisman of Lost Diligence",
 
+
+  "screen.talisman.virtue_panel": "Virtue Panel",
 
 
   "itemGroup.talisman": "Talisman",
@@ -18,7 +26,9 @@
   "entity.talisman.sludge": "Sludge",
   "entity.talisman.shadow_hand": "Shadow Hand",
   "entity.talisman.gumgar": "Gumgar",
-  "entity.talisman.lost_diligence": "Lost Diligence"
+  "entity.talisman.lost_diligence": "Lost Diligence",
+  "entity.talisman.diligent_guard": "Diligent Guard"
+
 
 
 

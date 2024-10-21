@@ -1,6 +1,7 @@
 package net.bluetree.talisman.entities.custom;
 
 import net.bluetree.talisman.items.ModItems;
+import net.bluetree.talisman.sounds.ModSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -12,6 +13,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -43,7 +45,7 @@ public class ShadowHandEntity extends HostileEntity implements GeoAnimatable {
 
     public static DefaultAttributeContainer.Builder setAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 30.0)  // Health of the hand
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0)  // Health of the hand
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0) // Damage per tick
                 .add(EntityAttributes.GENERIC_ARMOR, 5.0);  // Some armor to make it tough
     }
@@ -110,7 +112,7 @@ public class ShadowHandEntity extends HostileEntity implements GeoAnimatable {
         // If entities are detected above, play the attack (grab) animation
         BlockPos blockPosAbove = this.getBlockPos().up();
         Box detectionBox = new Box(blockPosAbove).expand(0.5);
-        List<LivingEntity> entitiesAbove = this.getWorld().getEntitiesByClass(LivingEntity.class, detectionBox, entity -> !entity.isSpectator() && entity != this);  // Exclude itself
+        List<HostileEntity> entitiesAbove = this.getWorld().getEntitiesByClass(HostileEntity.class, detectionBox, entity -> !entity.isSpectator() && entity != this);  // Exclude itself
 
         if (!entitiesAbove.isEmpty()) {
             controller.setAnimation(GRAB_ANIMATION);
@@ -151,4 +153,11 @@ public class ShadowHandEntity extends HostileEntity implements GeoAnimatable {
     protected void pushAway(Entity entity) {
         // Prevent pushing entities
     }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.LOST_DILIGENCE_HURT;
+    }
+
+
 }

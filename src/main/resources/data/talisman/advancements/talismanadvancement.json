@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "item": "talisman:lost_diligence_talisman"
+    },
+    "title": "Talisman",
+    "description": "Welcome to Pain",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "talisman:textures/item/lost_dilligence_talisman.png"
+  },
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "talisman:ferrous_heart"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 package net.bluetree.talisman.entities.custom;
 
+import net.bluetree.talisman.sounds.ModSounds;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.entity.EntityType;
@@ -8,10 +9,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -55,9 +59,9 @@ public class OozeEntity extends PathAwareEntity implements GeoAnimatable {
         this.goalSelector.add(2, new DepositInChestGoal());
         this.goalSelector.add(3, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.add(4, new WanderAroundFarGoal(this, 0.8D));
-
-        // Add target goal to attack hostile entities
-        this.targetSelector.add(1, new ActiveTargetGoal<>(this, HostileEntity.class, true));
+        this.goalSelector.add(1, new RevengeGoal(this));
+        // Add target goal to attack hostile entities, but ignore ShadowHandEntity
+        this.targetSelector.add(1, new ActiveTargetGoal<>(this, HostileEntity.class, true, entity -> !(entity instanceof ShadowHandEntity)));
     }
 
     @Override
@@ -72,7 +76,7 @@ public class OozeEntity extends PathAwareEntity implements GeoAnimatable {
                         this.getX(),               // X position
                         this.getY(),               // Y position
                         this.getZ(),               // Z position
-                        0.0, 0.5, 0.0              // Zero velocity to keep them stationary
+                        0.0, 0.0, 0.0              // Zero velocity to keep them stationary
                 );
             }
         }
@@ -89,7 +93,7 @@ public class OozeEntity extends PathAwareEntity implements GeoAnimatable {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 1, this::predicate));
+        controllers.add(new AnimationController<>(this, "controller", 3, this::predicate));
     }
 
     @Override
@@ -133,8 +137,12 @@ public class OozeEntity extends PathAwareEntity implements GeoAnimatable {
             // Pick up the closest item when within range
             if (!nearbyItems.isEmpty()) {
                 ItemEntity closestItem = nearbyItems.get(0);
-                carriedItem = closestItem.getStack();
-                closestItem.discard(); // Remove the item from the world
+
+                // Check if it is indeed an ItemEntity before interacting
+                if (closestItem instanceof ItemEntity) {
+                    carriedItem = closestItem.getStack();
+                    closestItem.discard(); // Remove the item from the world
+                }
             }
         }
 
@@ -171,26 +179,22 @@ public class OozeEntity extends PathAwareEntity implements GeoAnimatable {
 
         @Override
         public void tick() {
-            // If close to the chest, deposit the item
             if (targetChestPos != null && getBlockPos().isWithinDistance(targetChestPos, 2.0)) {
                 BlockEntity blockEntity = getWorld().getBlockEntity(targetChestPos);
+
                 if (blockEntity instanceof ChestBlockEntity chest) {
                     for (int i = 0; i < chest.size(); i++) {
                         ItemStack stackInSlot = chest.getStack(i);
 
-                        // Check if the stack in the slot is empty
                         if (stackInSlot.isEmpty()) {
-                            // Place the carried item in the empty slot
                             chest.setStack(i, carriedItem);
                             carriedItem = ItemStack.EMPTY;
                             break;
                         } else if (ItemStack.areItemsEqual(stackInSlot, carriedItem) && stackInSlot.getCount() < stackInSlot.getMaxCount()) {
-                            // If the item in the slot is the same as the carried item and there is room to add more
                             int transferableAmount = Math.min(carriedItem.getCount(), stackInSlot.getMaxCount() - stackInSlot.getCount());
                             stackInSlot.increment(transferableAmount);
                             carriedItem.decrement(transferableAmount);
 
-                            // If the carried item count is reduced to zero, clear it
                             if (carriedItem.isEmpty()) {
                                 break;
                             }
@@ -199,6 +203,7 @@ public class OozeEntity extends PathAwareEntity implements GeoAnimatable {
                 }
             }
         }
+
 
         @Override
         public boolean shouldContinue() {
@@ -223,4 +228,11 @@ public class OozeEntity extends PathAwareEntity implements GeoAnimatable {
             return Optional.empty();
         }
     }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.GENERIC_OOZE_AMBIENT_1;
+    }
+
+
 }

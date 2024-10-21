@@ -1,0 +1,56 @@
+{
+  "lost_diligence_ambient": {
+    "subtitle": "talisman.lost_diligence_ambient",
+    "sounds": [
+      "talisman:lost_diligence_ambient"
+    ]
+  },
+  "lost_diligence_hurt": {
+    "subtitle": "talisman.lost_diligence_hurt",
+    "sounds": [
+      "talisman:lost_diligence_hurt"
+    ]
+  },
+  "lost_diligence_death": {
+    "subtitle": "talisman.lost_diligence_death",
+    "sounds": [
+      "talisman:lost_diligence_death"
+    ]
+  },
+
+  "generic_ooze_ambient": {
+    "subtitle": "talisman.generic_ooze_ambient",
+    "sounds": [
+      "talisman:generic_ooze_ambient"
+    ]
+  },
+
+  "generic_ooze_ambient_2": {
+    "subtitle": "talisman.generic_ooze_ambient_2",
+    "sounds": [
+      "talisman:generic_ooze_ambient_2"
+    ]
+  },
+
+  "diligent_guard_ambient": {
+    "subtitle": "talisman.diligent_guard_ambient",
+    "sounds": [
+      "talisman:diligent_guard_ambient"
+    ]
+  },
+
+  "diligent_guard_attack": {
+    "subtitle": "talisman.diligent_guard_attack",
+    "sounds": [
+      "talisman:diligent_guard_attack"
+    ]
+  },
+
+  "gumgar_attack": {
+    "subtitle": "talisman.gumgar_attack",
+    "sounds": [
+      "talisman:gumgar_attack"
+    ]
+  }
+
+}

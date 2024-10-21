@@ -36,7 +36,7 @@ public class ModEntities {
             Registries.ENTITY_TYPE,
             new Identifier(Talisman.MOD_ID, "gumgar"),
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, GumgarEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.9f, 0.9f))
+                    .dimensions(EntityDimensions.changing(1f, 2f))
                     .build()
     );
 
@@ -44,7 +44,7 @@ public class ModEntities {
             Registries.ENTITY_TYPE,
             new Identifier(Talisman.MOD_ID, "lost_dilligence"),
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, LostDiligenceEntity::new)
-                    .dimensions(EntityDimensions.fixed(1f, 1f))
+                    .dimensions(EntityDimensions.changing(1f, 3f))
                     .build()
     );
 
@@ -52,6 +52,14 @@ public class ModEntities {
             Registries.ENTITY_TYPE,
             new Identifier(Talisman.MOD_ID, "shadow_hand"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, ShadowHandEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.8f, .8f))
+                    .build()
+    );
+
+    public static final EntityType<DiligentGuardEntity> DILIGENT_GUARD = Registry.register(
+            Registries.ENTITY_TYPE,
+            new Identifier(Talisman.MOD_ID, "diligent_guard"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DiligentGuardEntity::new)
                     .dimensions(EntityDimensions.fixed(0.8f, .8f))
                     .build()
     );
@@ -92,4 +100,6 @@ public class ModEntities {
 
     public static void registerModEntities(){
     }
+
+
 }
