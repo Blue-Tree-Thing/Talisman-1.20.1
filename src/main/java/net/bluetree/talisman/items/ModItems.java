@@ -14,6 +14,7 @@ import net.minecraft.util.Identifier;
 public class ModItems {
 
     public static final Item BLANK_TALISMAN = registerItem("blank_talisman", new Item(new FabricItemSettings()));
+    public static final Item BLANK_UNSTABLE_TALISMAN = registerItem("blank_unstable_talisman", new Item(new FabricItemSettings()));
     public static final Item ASPECT_OF_DILIGENCE = registerItem("aspect_of_diligence", new Item(new FabricItemSettings()));
     public static final Item FERROUS_HEART = registerItem("ferrous_heart", new Item(new FabricItemSettings()));
     public static final Item DARK_ESSENCE = registerItem("dark_essence", new Item(new FabricItemSettings()));
@@ -29,6 +30,7 @@ public class ModItems {
     // Register items for the custom item group
     private static void addItemsToTalismanGroup(FabricItemGroupEntries entries) {
         entries.add(BLANK_TALISMAN);
+        entries.add(BLANK_UNSTABLE_TALISMAN);
         entries.add(ASPECT_OF_DILIGENCE);
         entries.add(FERROUS_HEART);
         entries.add(DARK_ESSENCE);

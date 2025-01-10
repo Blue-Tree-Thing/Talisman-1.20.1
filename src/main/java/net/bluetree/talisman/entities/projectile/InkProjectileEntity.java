@@ -1,10 +1,12 @@
 package net.bluetree.talisman.entities.projectile;
 
 import net.bluetree.talisman.entities.ModEntities;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -126,22 +128,37 @@ public class InkProjectileEntity extends PersistentProjectileEntity implements G
         super.onEntityHit(entityHitResult);
 
         if (!this.getWorld().isClient) {
-            PlayerEntity entity = (PlayerEntity) entityHitResult.getEntity();
-            if (entity.isAlive() && entity != this.getOwner()) {
-                // Deal damage to the entity
-                entity.damage(this.getDamageSources().magic(), 6); // Deal 4 damage (2 hearts)
+            // Get the hit entity properly without casting
+            Entity hitEntity = entityHitResult.getEntity();
 
-                // Apply slowness effect to the entity
-                entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1)); // Slowness for 5 seconds at level 1
+            // Only process if it's a living entity and not the owner
+            if (hitEntity instanceof LivingEntity livingEntity &&
+                    livingEntity.isAlive() &&
+                    livingEntity != this.getOwner()) {
+
+                float damage = 6.0f; // Base damage (3 hearts)
+
+                // Apply effects based on entity type
+                if (livingEntity instanceof PlayerEntity) {
+                    // Player-specific effects
+                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1));
+                } else if (livingEntity instanceof HostileEntity) {
+                    // Hostile mob effects (maybe stronger or different)
+                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 150, 2));
+                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 100, 1));
+                }
+
+                // Deal damage to the entity
+                livingEntity.damage(this.getDamageSources().magic(), damage);
 
                 // Play sound effect on entity hit
                 this.getWorld().playSound(
                         null,
-                        entity.getX(),
-                        entity.getY(),
-                        entity.getZ(),
-                        SoundEvents.ENTITY_SLIME_ATTACK, // Adjust the sound effect as needed
-                        SoundCategory.PLAYERS,
+                        livingEntity.getX(),
+                        livingEntity.getY(),
+                        livingEntity.getZ(),
+                        SoundEvents.ENTITY_SLIME_ATTACK,
+                        SoundCategory.NEUTRAL,
                         1.0F,
                         1.0F
                 );

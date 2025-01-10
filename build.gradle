@@ -23,6 +23,7 @@ repositories {
 		name = "Fabric"
 		url = "https://maven.fabricmc.net/"
 	}
+
 }
 
 fabricApi {
@@ -42,6 +43,8 @@ dependencies {
 	implementation("com.eliotlash.mclib:mclib:20")
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+
 }
 
 processResources {
