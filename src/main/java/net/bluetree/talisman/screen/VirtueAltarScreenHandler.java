@@ -49,8 +49,8 @@ public class VirtueAltarScreenHandler extends ScreenHandler {
         super(ModScreenHandlers.VIRTUE_ALTAR_SCREEN_HANDLER, syncId);
         this.inventory = blockEntity;
 
-        // Use the custom AltarSlot for the top slot
-        this.addSlot(new AltarSlot(inventory, 0, 80, 4)); // Adjusted to move up by a third of a slot
+        // Use the custom AltarSlot for the top slot - moved down by approximately half a slot height
+        this.addSlot(new AltarSlot(inventory, 0, 80, 12)); // Changed from y:4 to y:12
 
         // Move player inventory slots up by a third of a slot (6 pixels)
         for (int i = 0; i < 3; i++) {
@@ -69,7 +69,7 @@ public class VirtueAltarScreenHandler extends ScreenHandler {
     public VirtueAltarScreenHandler(int syncId, PlayerInventory playerInventory) {
         super(ModScreenHandlers.VIRTUE_ALTAR_SCREEN_HANDLER, syncId);
         this.inventory = new SimpleInventory(1); // Minimal setup for registration
-        this.addSlot(new AltarSlot(this.inventory, 0, 80, 4)); // Adjusted altar slot
+        this.addSlot(new AltarSlot(this.inventory, 0, 80, 12)); // Changed from y:4 to y:12
 
         // Adjusted player inventory slots
         for (int i = 0; i < 3; i++) {

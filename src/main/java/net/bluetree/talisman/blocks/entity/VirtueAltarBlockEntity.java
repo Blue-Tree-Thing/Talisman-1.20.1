@@ -55,7 +55,7 @@ public class VirtueAltarBlockEntity extends BlockEntity implements NamedScreenHa
 
     @Override
     public Text getDisplayName() {
-        return Text.literal("Virtue Altar");
+        return Text.literal("");
     }
 
     @Nullable
